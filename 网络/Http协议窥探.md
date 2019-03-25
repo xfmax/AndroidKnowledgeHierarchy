@@ -1,0 +1,123 @@
+####POST和GET
+HTTP一共有８种请求，其中比较重要的就是POST和GET，其余的还有HEAD、PUT.
+1.GET请求可以被缓存起来，收藏为书签，但是POST不行。
+2.GET可以被保存到历史记录中，但是POST不会。
+3.GET请求的长度有限制（根据浏览器的不同而不同，大约几kb），POST无限制
+4.GET请求的参数在URL连接上，相对不安全，POST请求参数写在HTTP的请求头中，相对安全。
+
+###首部(共74个，不能一一列出，只挑选相对重要一些的)
+#### 通用首部
+Cache-control：
+     
+     no-cache：强制向源服务器再次验证。
+     no-store： 不缓存请求或响应的内容。      
+Connection:
+
+    1.控制不再转发给代理的首部字段（Connection：不再转发的首部字段名）。
+    2.管理持久连接（Connection：close 关闭连接  Connection：Keep-Alive ）。 
+    【注】：HTTP/1.1默认连接是持久连接，对于1.1之前的版本需要使用Connection：Keep-Alive来保持持久连接。
+Upgrade:
+
+     除了使用HTTP协议外，还能用此字段进行扩展协议
+Via:
+    
+    为了追踪client和server之间的请求和响应的路径。
+    例：Via：1.0 gw.hackr.jp     1.0表示http的版本，gw.hackr.jp表示当前的代理服务器信息。
+    
+Date:
+
+    Date: Tue01 Jul 2012 04:40:59 GMT
+
+Warning:
+
+#### 请求首部
+accept:
+用于指定客户端接受那些请求的类型。
+例：Accept：text/html，表明客户端希望接受html文本。
+
+accept-encoding:
+用于指定客户端可接受的编码内容。
+accept-language:
+用于指定客户端可接受的自然语言。
+accept-charset:
+用于指定客户端可接受的字符集。
+Authorization:
+用于证明客户端有权限查看某些资源。
+Host:
+用于指定被请求资源的Internet主机和端口号。
+If-Match:
+告诉服务器匹配资源所用的实体标记值（ETag）。
+If-Range：
+告诉服务器若指定的If-Range字段值和请求资源的ETag值或时间相一致时，则作为范围请求处理。
+Max-Forwards:
+通过TRACE方法或OPTIONS方法。
+User-Agent:
+它的操作系统、浏览器和其它属性告诉服务器。
+#### 响应首部
+Accept-Ranges:
+用来告知客户端服务器是否能处理范围请求，以指定获取服务器端某个部分的资源。
+Age:
+告知客户端，源服务器在多久前创建了响应。字段值的单位为秒。
+ETag:
+能告知客户端实体标识，一种可将资源以字符串形式做唯一标识的方式，服务器会为每份资源分配对应的ETag值。
+强ETag值和弱ETag值
+强ETag值，不论实体发生多么细微的变化都会改变其值。
+弱ETag值，只用于提示资源是否相同，只有资源发生了根本改变，产生差异时才会改变ETag值。这时会在字段值最开始处附加W/，ETag：W/"usagi-1234"
+Location:
+使用首部字段Location可以将响应接收方引导至某个与请求URI位置不同的资源。
+Retry-After:
+告知客户端应该在多久之后再次发送请求。
+Server:
+告知客户端当前服务器上安装的HTTP服务器应用程序的信息。
+例子：Server：Apache/2.2.6（Unix）PHP/5.2.5
+Vary:
+对缓存进行控制，源服务器会向代理服务器传达关于本地缓存使用方法的命令。
+WWW-Authenticate:
+首部字段WWW-Authenticateu用于HTTP访问认证。告知客户端适用于访问请求URI所指定资源的认证方案和带参数提示的质询。
+####实体首部
+Allow:
+告知客户端能够支持Request-URI指定资源的所有HTTP方法。
+Content-Encoding:
+通知客户端服务器对实体的主体部分选用的内容编码方式（gzip、compress、deflate、identity）。
+Content-Language:
+通知客户端服务器对实体的主体部分使用的自然语言。
+Content-Location:
+Content-Location:http://www.baidu.com
+表示报文主体返回资源对应的URI。
+Content-MD5:
+客户端会对接收的报文主体执行相同的MD5算法，然后与首部字段Content-MD5的字段值比较。
+Content-Range:
+返回响应时使用的首部字段Content-Range，能告知客户端作为响应返回的实体的哪个部分符合范围请求。字段值以字节为单位，表达当前发送部分及整个实体大小。
+Content-Type:
+说明了实体主体内对象的媒体类型。
+Expires:
+将资源失效的日期告知客户端。
+Last-Modified:
+指明资源最终修改的时间。
+
+####其他
+Cookie：服务器接收到的Cookie信息
+例子：
+set-Coolie:开始状态管理所使用的Cookie信息
+例子：set-Cookie:status=enable;expires=Tue,05 Jul 2016 08:00:00 GMT;path=/;domain=www.baidu.com
+###加密机制
+
+###HTTP与HTTPS
+HTTP协议：使用HTTP协议时，客户端与服务端的80端口建立一个TCP连接，然后就在这个连接的基础上进行请求和应答，以及数据的交换。
+[注]：HTTP1.0和HTTP1.1的区别是：1.0每次请求都要建立一个新的TCP，1.1可以运行在一个连接上发送多次命令和应答，提高效率。
+
+HTTPS的优势：加密+认证+完整性保证。
+HTTPS的劣势：
+
+    1.加密需要占用大量cpu和内存
+    2.多了一层SSL和TLS通信层，必然拖慢速度。
+
+#### Cookie和Session
+作用：因为HTTP是一种无状态的连接，所以无法记录上次传输的数据。
+1.Cookie保存客户端，Session保存在服务器。
+2.Cookie相对来说不安全，浏览器可以分析本地的Cookie，进行Cookie欺骗。
+3.Session可以设置超时时间，超过这个时间就会失效，以免长期占用服务器内存。
+4.单个Cookie大小限制（4kb），每个站点的Cookie数量一般也有限制（20个）。
+5.客户端每次都会把Cookie发送到服务器，因此服务器可以知道Cookie，但是客户端不知道Session。
+
+服务器收到Cookie后，会根据Cookie中的SessionID来找到客户的Session，如果没有，会生成一个新的SessionID随Cookie发送给客户端。
