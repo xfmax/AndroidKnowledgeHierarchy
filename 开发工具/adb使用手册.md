@@ -90,7 +90,7 @@ adb,全称为Android debug bridge（安卓调试桥），既然是一座桥，�
         adb install -r path_to_apk
 
 
-[注]：如果你在AndroidManifest.xml文件中添加了属性testOnly=true,此时你使用的apk的path是开发计算机的目录，想要直接安装到Android设备上的时候会报错（Failure [INSTALL_FAILED_TEST_ONLY]），你需要使用push指令将apk发送到Android设备上，在使用pm指令的安装命令，如下：
+[注]：如果你在AndroidManifest.xml文件中添加了属性testOnly=true,此时你使用的apk的path是开发计算机的目录，想要直接安装到Android设备上的时候会报错（Failure [INSTALL_FAILED_TEST_ONLY]），你可以使用push指令将apk发送到Android设备上，在使用pm指令的安装命令（也可以直接使用 adb install -t path_to_apk），如下：
 
         adb push dev_path_apk android_path_apk
         adb shell pm install -t android_path_apk
