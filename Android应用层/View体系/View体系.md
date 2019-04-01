@@ -1059,7 +1059,7 @@ public static int makeMeasureSpec(@IntRange(from = 0, to = (1 << MeasureSpec.MOD
 
         1.UNSPECIFIED：未指定模式，View想多大就多大，父容器不做限制。
         2.EXACTLY：精确模式，对应于match_parent属性，父容器测量出的View所需要的大小，也就是SpecSize的值。
-        3.AT_MOSTLY：最大模式，对应wrap_content属性，子View的大小不能大于父容器测量出的View所需要的大小。
+        3.AT_MOST：最大模式，对应wrap_content属性，子View的大小不能大于父容器测量出的View所需要的大小。
 
 一个View的宽和高收到两个值的影响：
 
