@@ -16,9 +16,10 @@
 类加载子系统的工作是类生命周期中加载的时候执行根据名字找到对应的二进制流，并创建class对象，作为方法区该类的访问入口。
 
 其中分为三种加载器：
-1.BootStrapClassLoader 加载Java自身的api的，例如java.lang、java.util等这些系统类。
-2.ExtensionsClassLoader 加载$JAVA_HOME/jre/lib/ext文件。
-3.ApplicationClassLoader 加载当前应用的ClassPath目录。
+
+    1.BootStrapClassLoader 加载Java自身的api的，例如java.lang、java.util等这些系统类。
+    2.ExtensionsClassLoader 加载$JAVA_HOME/jre/lib/ext文件。
+    3.ApplicationClassLoader 加载当前应用的ClassPath目录。
 
 #### 运行时数据区域
 
@@ -30,11 +31,11 @@
 
 ## 二.对象的创建
 
-1.判断对相对应的类是否加载、链接和初始化。
-2.为对象分配内存。
-3.处理并发安全。
-4.初始化分配到的内存空间。
-5.设置对象的对象头。
+    1.判断对相对应的类是否加载、链接和初始化。
+    2.为对象分配内存。
+    3.处理并发安全。
+    4.初始化分配到的内存空间。
+    5.设置对象的对象头。
 
 ## 三.对象在JVM中的生命周期
 
@@ -77,7 +78,7 @@
 
 根据对象生命周期的不同，将虚拟机堆划分成不同的区域，也就是分代的概念。
 
-jvm将分代的区域分为 新生代 老年代，其中新生代分为eden、from survivor、to survivor，因为Eden中的对象存活时间较短，所以虚拟机分配的空间也不是平均分配，HotSpot默认的Eden和两个survivor空间的比值为8:1。
+jvm将分代的区域分为**新生代**和**老年代**，其中新生代分为eden、from survivor、to survivor，因为Eden中的对象存活时间较短，所以虚拟机分配的空间也不是平均分配，HotSpot默认的Eden和两个survivor空间的比值为8:1。
 
 分代是为了解决对象生命周期不同的问题，所以在每个不同的分代区域会根据这个区域的特点执行适宜的垃圾回收算法。
 
@@ -85,3 +86,4 @@ jvm将分代的区域分为 新生代 老年代，其中新生代分为eden、fr
 
     1.Minor Collection:新生代垃圾回收。
     2.Full Collection:老年代垃圾回收，通常伴随一次Minor Collection，它的收集频率较低，时间较长。
+
