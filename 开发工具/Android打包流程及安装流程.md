@@ -1,5 +1,7 @@
 详细的打包流程：
 
+![install-image](https://github.com/xfmax/android_know/blob/master/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/image/apk_build.png)
+
     1.aapt将各个模块的manifest文件、res文件夹下的文件、assets文件夹下的文件，执行合并，然后为res文件夹下的图片文件生成R.java、将res文件夹下的xml文件生成resource.arsc文件，raw和assets文件夹的内容保持原状，assets文件夹下的文件是不能被映射到R.java中的，所以使用AssetManager进行加载。
 
     2.aidl文件转换为java文件。
