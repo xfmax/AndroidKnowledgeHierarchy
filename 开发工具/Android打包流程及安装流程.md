@@ -32,7 +32,7 @@
 
 整个的安装流程如图：
 
-![install-image](https://github.com/xfmax/android_know/blob/master/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/image/apk_install-structure.png)
+![install-image](https://github.com/xfmax/android_know/blob/master/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/image/apk_install_structure.png)
 
     1.复制apk文件到/data/app/pkg目录下。
     2.解析AndroidManifest文件，并建立/data/data/pkg目录。
