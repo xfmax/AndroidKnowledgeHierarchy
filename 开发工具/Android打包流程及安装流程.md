@@ -14,9 +14,9 @@
 
     5.使用apkbuilder工具将上面resource.arsc和dex文件、raw文件夹、assets文件夹、第三方库资源文件打包成一个未签名的apk文件。
 
-    6.使用jarsigner工具对apk文件进行签名。
+    6.使用jarsigner工具对apk文件进行签名，签名后会在根目录生成META-INF目录，里面存放这三个文件，分别为MANIFEST.MF、CERT.SF、CERT.RSA。
 
-    7.使用zipalign工具对apk进行对齐处理，以4字节的倍数进行存放。
+    7.使用zipalign工具对apk进行对齐处理，使所有的资源文件按照距文件起始偏移4字节的倍数进行存放。
 
 
 安装流程：
