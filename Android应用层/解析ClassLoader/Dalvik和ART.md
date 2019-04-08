@@ -3,7 +3,7 @@
 JVM基于栈，DVM基于寄存器，速度更快。
 
 2.执行的字节码不同。
-JVM执行class文件，DVM执行dex文件。
+JVM执行class文件，DVM执行dex文件，dex文件将多个class文件去掉冗余文件后合并为一个dex文件，io效率提升。
 
 3.DVM允许在有限的内存中同时运行多个进程。
 Andorid中每一个应用都有一个DVM实例
@@ -20,10 +20,14 @@ DVM与ART在功能上和JVM没有什么特别的区别，都是将字节码翻�
 
 #### DVM GC REASON与日志
 DVM:
-GC_CONCURRENT:第一次填充堆的时候，触发gc释放内存，用以提供更大的堆空间。
-GC_FOR_MALLOC:堆满时，gc释放空间已允许为新的对象分配内存空间。
-GC_HPROF_DUMP_HEAP:请求创建HPROF文件以分析内存堆栈为目的的gc。
-GC_EXPLICIT:手动操作gc，例如system.gc()；
+
+    GC_CONCURRENT:第一次填充堆的时候，触发gc释放内存，用以提供更大的堆空间。
+
+    GC_FOR_MALLOC:堆满时，gc释放空间已允许为新的对象分配内存空间。
+
+    GC_HPROF_DUMP_HEAP:请求创建HPROF文件以分析内存堆栈为目的的gc。
+
+    GC_EXPLICIT:手动操作gc，例如system.gc()；
 
 #### DVM运行时堆的内容都有什么：
 DVM：分为两个部分，zygote heap和allocation heap，zygote heap是zygote在启动的时候预加载与创建的各种对象需要使用的空间，在DVM启动后会将一块内存分为zygote heap和allocation heap两部分，所有DVM实例可以共享zygote heap部分，但是allocation heap部分都是各自独有的。
@@ -44,7 +48,7 @@ Mark Stack：DVM使用的标记清除的方式进行GC的，Mark Stack用来标�
 4.ART的运行时堆内存划分方式也不同。
 
 #### ART运行时堆
-ART采用多种垃圾收集方案，每个方案运行不同的垃圾收集器，默认采用CMS方案。划分区域在DVM的zygote space、allocation space的基础上增加了Image space 、 LargeObject space。
+ART采用多种垃圾收集方案，每个方案运行不同的垃圾收集器，默认采用CMS方案。划分区域在DVM的zygote space、allocation space的基础上增加了Image space(存放预加载类) 、 LargeObject space（存放大对象，默认12kb）。
 Image space用来存储一下预加载类，LargeObject space用来放一些大对象（默认12K）
 
 
