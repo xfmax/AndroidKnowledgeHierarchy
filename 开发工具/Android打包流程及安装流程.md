@@ -37,7 +37,7 @@
     1.复制apk文件到/data/app/pkg目录下。
     2.解析AndroidManifest文件，并建立/data/data/pkg目录。
     3.将apk文件中的dex优化并解析到/data/delvik-cache/pkg目录，如果是art虚拟机的话，则将优化过的dex文件保存在/data/app/pkg/oat目录。
-    4.解析AndroidManifest文件，将其中的信息提取到/system/app/package.xml文件中。
+    4.解析AndroidManifest文件，将其中的信息提取到/data/system/package.xml文件中。
     5.安装完成，发送广播。
 
 源代码流程：PackageInstall会将apk信息交给PMS处理，PMS通过PackageHandler发送消息来驱动来控制一个新的进程中DefaultContainerService，来完成apk的复制，安装前的校验以及安装工作。
