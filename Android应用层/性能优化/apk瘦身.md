@@ -34,7 +34,7 @@ res/raw 和 assets的不同点：
     1.格式的选择：webP是最好的，比jpg省25%-35%,比png省80%左右。
     2.使用Tiny进行压缩。
     3.使用矢量图像，例如VectorDrawable，但是只能针对一些小图，否则系统加载的时间很长。
-    4.剔除未被使用的资源，在build.gradle中设置参数shrinkResources为true；
+    4.移除未使用的资源，在build.gradle中设置参数shrinkResources为true；
     
 例如，将下边的代码保存在 res/raw/keep.xml。构建不会将该文件打包到 APK 之中。
 
