@@ -446,3 +446,69 @@ protected void onHandleIntentInForeground(@Nullable Intent intent) {
   但是，其实一个Applicaiton下可以有多个activity使用上述的intent-filter。
   所以综上两点，你都实现了，这个Activity就会在屏幕上创建一个icon。  
 [注]：什么时候开始进行activity的检测？
+这个问题需要查看AndroidWatchExecutor类，在调用watch函数的时候会使用这个Executor对象来创建线程处理任务
+```java
+  @Override protected @NonNull WatchExecutor defaultWatchExecutor() {
+    return new AndroidWatchExecutor(DEFAULT_WATCH_DELAY_MILLIS);
+  }
+```
+创建AndroidWatchExecutor的位置，参数为5秒。
+```java
+public AndroidWatchExecutor(long initialDelayMillis) {
+    mainHandler = new Handler(Looper.getMainLooper());
+    HandlerThread handlerThread = new HandlerThread(LEAK_CANARY_THREAD_NAME);
+    handlerThread.start();
+    backgroundHandler = new Handler(handlerThread.getLooper());
+    this.initialDelayMillis = initialDelayMillis;
+    maxBackoffFactor = Long.MAX_VALUE / initialDelayMillis;
+  }
+```
+这个构造函数中创建了一个HandlerTread，并由handlerThread的looper创建一个子线程的handler，以及一个主线程的handler，接着我们看一下这个类的execute方法：
+
+```java
+  @Override public void execute(@NonNull Retryable retryable) {
+    if (Looper.getMainLooper().getThread() == Thread.currentThread()) {
+      waitForIdle(retryable, 0);
+    } else {
+      postWaitForIdle(retryable, 0);
+    }
+  }
+```
+分两种情况，如果在主线程，调用waitForIdle，如果在子线程会使用mainHandler回调到主线程最终还是调用waitForIdle：
+```java
+  private void waitForIdle(final Retryable retryable, final int failedAttempts) {
+    // This needs to be called from the main thread.
+    Looper.myQueue().addIdleHandler(new MessageQueue.IdleHandler() {
+      @Override public boolean queueIdle() {
+        postToBackgroundWithDelay(retryable, failedAttempts);
+        return false;
+      }
+    });
+  }
+```
+这个方法使用了idleHandler技术，这个技术是只指：正常情况下looper会一直从MessageQueue中取出message，但是当MessageQueue中没有message了，也就是空闲了的时候，就会执行IdleHandler中的queueIdle方法，言外之意，就是等着主线程空闲在执行这个方法：
+```java
+  private void postToBackgroundWithDelay(final Retryable retryable, final int failedAttempts) {
+    long exponentialBackoffFactor = (long) Math.min(Math.pow(2, failedAttempts), maxBackoffFactor);
+    long delayMillis = initialDelayMillis * exponentialBackoffFactor;
+    backgroundHandler.postDelayed(new Runnable() {
+      @Override public void run() {
+        Retryable.Result result = retryable.run();
+        if (result == RETRY) {
+          postWaitForIdle(retryable, failedAttempts + 1);
+        }
+      }
+    }, delayMillis);
+  }
+```
+这就是开启一个子线程来执行retryable.run()，回到之前excute的调用处：
+```java
+private void ensureGoneAsync(final long watchStartNanoTime, final KeyedWeakReference reference) {
+    watchExecutor.execute(new Retryable() {
+      @Override public Retryable.Result run() {
+        return ensureGone(reference, watchStartNanoTime);
+      }
+    });
+  }
+```
+所以可以总结一下了，Leakcanary的开始检测的时机是**主线程空闲5秒后**开始执行检测。
