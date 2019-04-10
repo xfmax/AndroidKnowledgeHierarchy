@@ -138,3 +138,8 @@ public class MainActivity extends AppCompatActivity implements SampleContract.Vi
 
 ### MVVM
 当业务变得越来越复杂，ui改变很多的情况下，会有非常多的跟ui相关的case，这样view的接口就会很庞大，MVVM就是为了解决这个问题的，通过双向绑定的机制，实现数据和ui内容，只要想改其中一方，另一方都能够及时更新的一种设计理念，省去view层中很多case的情况，只需要改变数据就可以了。
+
+MVVM的核心：
+
+    1.通过VM将[数据模型]传递给[视图模型]，使用的是 数据绑定。
+    2.通过VM将[视图模型]传递给[数据模型]，使用的是 DOM事件监听。
