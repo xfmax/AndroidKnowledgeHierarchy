@@ -1,3 +1,86 @@
+task:表单提交的方式，内部包结构是什么样子的？
+task：http的报文结构？
+
+首先，我们来介绍一下http的包结构：
+
+主要分为三个部分：
+
+    1.状态行
+    2.请求头
+    3.请求体
+
+    <method> <request-URL> <version>
+    <headers>
+
+    <entity-body>
+
+[注]：这里headers和entity-body之间有一行空行来进行分割。
+由于get请求比较简单，这里我们就以post请求为例来看看post请求的几种方式：
+
+由于协议并没有严格的规定请求体的编码方式，但是一般服务器是根据headers中的content-type字段来获知请求中是用什么方式编码的，所以我们来了解一下都有那些content-type类型：
+
+### applicaiton/x-www-form-urlencoded
+
+浏览器的原生表单，如果不设置enctype字段，那么请求的内容大体如下：
+
+    POST http://www.example.com HTTP/1.1
+    Content-Type: application/x-www-form-urlencoded;charset=utf-8
+
+    title=test&sub%5B%5D=1&sub%5B%5D=2&sub%5B%5D=3
+
+此时，提交的数据格式为 key=val1&key=val2    
+
+### mutipart/form-data
+
+这种方式就是表单提交的方式，一般在上传图片的时候又要上传数据就会使用这种方式：
+
+    POST http://www.example.com HTTP/1.1
+    Content-Type:multipart/form-data; boundary=----WebKitFormBoundaryrGKCBY7qhFd3TrwA
+
+    ------WebKitFormBoundaryrGKCBY7qhFd3TrwA
+    Content-Disposition: form-data; name="text"
+
+    title
+    ------WebKitFormBoundaryrGKCBY7qhFd3TrwA
+    Content-Disposition: form-data; name="file"; filename="chrome.png"
+    Content-Type: image/png
+
+    PNG ... content of chrome.png ...
+    ------WebKitFormBoundaryrGKCBY7qhFd3TrwA--
+
+可以看到每一部分都有一个boundary的分隔符来分割不同的字段，最后呢，使用--boundary--来作为结尾，如果输入的是文件还需要输入文件名和文件类型信息，可以看到状态行和header之间是没有分割的，而header和content之间是需要分割的。
+
+上面提到的都是原生浏览器支持的post提交数据的方式，还要一种跟json有关的编码方式：
+
+### application/json
+
+先看发送格式：
+
+    POST http://www.example.com HTTP/1.1 
+    Content-Type: application/json;charset=utf-8
+
+    {"title":"test","sub":[1,2,3]}
+
+很简单，entity-content里面直接就是一个json格式的字符串，特别适合restful接口。
+
+### text/xml
+
+    POST http://www.example.com HTTP/1.1 
+    Content-Type: text/xml
+
+    <?xml version="1.0"?>
+    <methodCall>
+     <methodName>examples.getStateName</methodName>
+        <params>
+         <param>
+              <value><i4>41</i4></value>
+         </param>
+     </params>
+    </methodCall>
+
+一种传输xml的数据格式，个人认为一般还是采用json的方式，xml的方式还是有些臃肿。    
+
+
 ####POST和GET
 HTTP一共有８种请求，其中比较重要的就是POST和GET，其余的还有HEAD、PUT.
 1.GET请求可以被缓存起来，收藏为书签，但是POST不行。
