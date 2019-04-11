@@ -1,0 +1,3 @@
+task1：https和http的异同？
+task2：https握手过程？
+task3：HttpUrlConnection是如何实现https的？以及优化dns域名解析

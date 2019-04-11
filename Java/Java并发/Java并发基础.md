@@ -1,3 +1,7 @@
+task：实现锁的方式？
+task：synchroized是可重入锁吗？java如何实现synchroized的可重入？
+task：ReentrantLock如何实现可重入？
+
 并发需要掌握的几个并发特性：
 
 * 原子性
