@@ -17,4 +17,38 @@ https在http的基础上，在传输层（Tcp）上面建立了一个SSL/TLS安�
       检查通过会随机生成一个session ticket3，并使用证书中的公钥进行加密，并发送给服务器，服务器端会通过私钥解密出session ticket3，然后通过session ticket1（浏览器）+session ticket2（服务器）+session ticket3（浏览器）组合成session ticket。
 
 如图：
-  
+![https](https://github.com/xfmax/android_know/blob/master/%E7%BD%91%E7%BB%9C/image/https.jpg)
+
+
+### httpurlConnection如何支持https，并优化DNS
+
+一、IP直连
+
+阿里云出品的HttpDNS
+
+实现原理：将域名发送给httpdns服务器，服务器返回域名对应的IP地址，然后客户端通过IP地址直接进行网络访问。
+
+```java
+public static HttpURLConnection getHttpURLConnection(String urlString)
+        throws IOException {
+    URL url = new URL(urlString);
+    String originHost = url.getHost();
+    HttpURLConnection conn;
+ 
+    String dstIp = httpdnsService.getIpByHost(url.getHost()); //这里得到了IP地址
+    if (dstIp != null) {
+        Log.d("HttpDNS Demo", "Get IP from HttpDNS, " + url.getHost() + ": " + dstIp);
+        urlString = urlString.replaceFirst(url.getHost(), dstIp);
+        url = new URL(urlString);
+        conn = (HttpURLConnection) url.openConnection();
+        // 设置HTTP请求头Host域
+        conn.setRequestProperty("Host", originHost); // 这里是设置head中的host
+        return conn;
+    } else {
+        Log.d("HttpDNS Demo", "Degrade to local DNS.");
+        return (HttpURLConnection) url.openConnection();
+    }
+}
+```
+
+https://mp.weixin.qq.com/s?__biz=MzA3ODgyNzcwMw==&mid=201837080&idx=1&sn=b2a152b84df1c7dbd294ea66037cf262&scene=2&from=timeline&isappinstalled=0&utm_source=tuicool

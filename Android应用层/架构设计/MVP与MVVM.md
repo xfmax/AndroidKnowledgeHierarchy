@@ -144,3 +144,9 @@ MVVM的核心：
     1.通过VM将[数据模型]传递给[视图模型]，使用的是 数据绑定。
     2.通过VM将[视图模型]传递给[数据模型]，使用的是 DOM事件监听。
 
+
+
+wget --no-check-certificate -O shadowsocks-all.sh https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks-all.sh
+chmod +x shadowsocks-all.sh
+./shadowsocks-all.sh 2>&1 | tee shadowsocks-all.log    
+
