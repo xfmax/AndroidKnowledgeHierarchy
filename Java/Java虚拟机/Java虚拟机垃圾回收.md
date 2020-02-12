@@ -94,3 +94,8 @@ jvm将分代的区域分为**新生代**和**老年代**，其中新生代分为
     1.Minor Collection:新生代垃圾回收。
     2.Full Collection:老年代垃圾回收，通常伴随一次Minor Collection，它的收集频率较低，时间较长。
 
+因为Full Collection比较复杂，所以拿Full Collection举例描述一次gc的过程：
+当执行一次Full Collection时，Eden空间的存活对象和From survivor的存活对象会复制到To Survivor中，之后From survivor 和To survivor互换名称,以等待下一次gc。
+有两种情况Eden和From survivor的存活对象不会复制进入To survivor:
+1.存活的对象的分代年龄超过了设置的阈值（-XX:MAXTenuringThreshold）
+2.To survivor放不下存活的对象了。
