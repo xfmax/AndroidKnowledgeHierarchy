@@ -1,0 +1,14 @@
+task1:LiveData的实现原理
+
+task2:对mvp的补充在哪里？
+
+task3:LiveData 如何实现生命周期的监听？
+
+答：
+
+task1：本质上是一个观察者模式，Activity和Fragment是观察者，LiveData是被观察者，LiveData存储的数据变化的时候触发事件（ui更新）。
+
+task2：替代p层中使用v层中的接口，v层的实例就不用以成员变量的方式存在于p层中。
+
+task3:activity和fragment中存在一个变量mLifecycleRegistry,在activity或者fragment执行生命周期方法的时候会执行mLifecycleRegistry.lifecycleChange方法，用来通知liveData生命周期Event，LiveData通过Event来判断是否要取消观察者的订阅。
+
