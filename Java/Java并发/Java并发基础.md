@@ -1,6 +1,8 @@
 task1：实现线程安全同步的方式？
 task2：synchronized是可重入锁吗？java如何实现synchronized的可重入？
 task3：ReentrantLock如何实现可重入？
+task4:Sychronized底层实现
+task5:Voltile底层实现
 
 并发需要掌握的几个并发特性：
 
@@ -28,3 +30,12 @@ task2：synchronized是可重入锁吗？java如何实现synchronized的可重�
 task3：ReentrantLock如何实现可重入？
 
 按照原理说，ReentrantLock和synchronized实现可重入的原理应该是相似的，但是synchronized是关键字，会直接翻译成jvm能识别的class文件中的指令。
+
+task4：
+
+task5：首先voltile起到的作用有两个：
+
+        1.保证内存的可见性
+        2.禁止JVM虚拟机的指令重排序
+
+底层实现，通过观察为变量添加与删除voltile关键字的字节码发现，其实在字节码中没有任何不同，所以voltile关键字不是作用在字节码上，在汇编代码上看到voltile修饰的变量前面有一个lock前缀，这是一个原子操作，在多线程的情况下内存地址保持互斥，而这个lock前缀相当于一个内存屏障，内存屏障的意思是一组cpu处理指令，实现对内存操作的顺序限制，同时内存屏障可以强制更新内存缓存。
