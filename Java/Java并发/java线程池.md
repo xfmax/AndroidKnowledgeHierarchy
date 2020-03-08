@@ -2,6 +2,8 @@ task1:了解线程池的复用和超时机制。
 
 task2:java提供的几种线程池
 
+task3:线程池有几种状态？
+
 我们先来了解一下线程池的构造都有哪几部分？
 
     1.核心线程
@@ -209,4 +211,34 @@ task2:java提供的几种线程池
         }
     }
 ```
-可以看到这个方法使用了一个workQueue，用这个队列的poll(等待时间，等待时间的单位)方法来控制线程的等待，在等待期间如果有任务被入队，那么这个线程就不会被回收，而是立即去执行任务，这就是线程池的复用和超时机制的原理所在。
+可以看到这个方法使用了一个workQueue，用这个队列的poll(等待时间，等待时间的单位)方法来控制非核心线程的等待，而如果是核心线程，直接调用take方法，在等待期间如果有任务被入队，那么这个线程就不会被回收，而是立即去执行任务，这就是线程池的复用和超时机制的原理所在。
+
+
+
+task2：
+
+    1.newFixedThreadPool，最大线程数定长，最大线程数==核心线程，非核心线程超时时间为0秒
+    2.newCachedThreadPool,都是非核心线程，最大线程数为Integer.MAX_VALUE，非核心线程超时为60秒,[注]：该线程池使用的是SynchronousQueue队列，次队列集成blockingQueue,同时次队列中只允许存在一个元素，通过这个队列，使得newCachedThreadPool里的线程看上去是同步执行的，不存在并发，[注]：如果加入队列之后，判断出当前没有正在运行的线程，那么会启动非核心线程。
+    3.newScheduledThreadPool,自定义核心线程数，最大线程数为Integer.MAX_VALUE,使用带有delay功能的工作队列，非核心线程超时为0秒
+    4.newSingleThreadPool,核心线程数==最大线程数==1，非核心线程超时时间为0秒
+
+
+
+[注]：核心线程与非核心线程只是一种叫法上的区别，在代码层面都是Thread，而且没有通过一个成员变量进行区分，只是通过 当前正在 运行的线程数与设定的核心线程数 的比较来判断当前这个要被处理的线程是那种类型，进入来确定需要不要超时。    
+
+
+task3:
+
+RUNNING：创建线程池之后，表示可以接收执行任务的状态
+SHUTDOWN：调用了shutdown之后的状态
+STOP：调用了shutdownNow之后的状态
+TIDYING：线程池与工作队列中都没有需要执行的任务时，进入此状态
+TERMINATED：调用terminate方法之后
+
+
+线程池的异常处理：
+
+1.try。。catch
+2.捕获future的get方法抛出的异常
+3.实例化线程池的时候，传入自己的ThreadFactory，使得每个Thread都被设置了setUnCaughtExceptionHandler
+4.通过ThreadPoolExecutor的afterExecutor方法传递异常引用

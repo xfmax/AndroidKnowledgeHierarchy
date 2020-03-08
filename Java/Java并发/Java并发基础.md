@@ -4,6 +4,8 @@ task3：ReentrantLock如何实现可重入？
 task4:Sychronized底层实现
 task5:Voltile底层实现
 
+task6:java的内存模型
+
 并发需要掌握的几个并发特性：
 
 * 原子性
@@ -31,7 +33,7 @@ task3：ReentrantLock如何实现可重入？
 
 按照原理说，ReentrantLock和synchronized实现可重入的原理应该是相似的，但是synchronized是关键字，会直接翻译成jvm能识别的class文件中的指令。
 
-task4：
+task4：在对象的头文件里会持有monitor这个对象的引用，这个对象会记录这个对象被其他对象持有锁的信息，以及等待队列等信息。
 
 task5：首先voltile起到的作用有两个：
 

@@ -41,4 +41,4 @@ RecyclerView的四级缓存，ListView只具有二级缓存
     4.如果高度固定，可以使用setHasFixedSize(true),以来避免requestLayout浪费资源
     5.滑动过程中停止加载
     6.如果不需要动画，可以把默认动画关闭来提升效率
-    7.
+    
