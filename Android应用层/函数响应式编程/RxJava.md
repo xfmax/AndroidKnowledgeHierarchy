@@ -60,5 +60,52 @@ RxJava是一个扩展了的观察者模式，还具备了线程切换的功能�
 可以看到create方法接受一个ObservableOnSubscribe对象，而ObservableOnSubscribe是什么呢？
 
 ```java
+public interface ObservableOnSubscribe<T> {
+
+    /**
+     * Called for each Observer that subscribes.
+     * @param emitter the safe emitter instance, never null
+     * @throws Exception on error
+     */
+    void subscribe(@NonNull ObservableEmitter<T> emitter) throws Exception;
+}
+```
+它是一个接口，里面有一个subscribe函数，接着看create方法：
+
+```java
+   @CheckReturnValue
+    @NonNull
+    @SchedulerSupport(SchedulerSupport.NONE)
+    public static <T> Observable<T> create(ObservableOnSubscribe<T> source) {
+        ObjectHelper.requireNonNull(source, "source is null");
+        return RxJavaPlugins.onAssembly(new ObservableCreate<T>(source));
+    }
+
+```
+接着看RxJavaPlugins.onAssembly：
+
+```java
+    @NonNull
+    public static <T> Observable<T> onAssembly(@NonNull Observable<T> source) {
+        Function<? super Observable, ? extends Observable> f = onObservableAssembly;
+        if (f != null) {
+            return apply(f, source);
+        }
+        return source;
+    }
+```
+可以看出ObservableCreate就是一个Observable对象，看到这里至少发现了一个问题，不同于一般的Builder设计模式，它是每一个链条上都要创建一个新的Observable对象，如果你不设置，那么直接返回source，接着我们来看看map的原理如何：
+
+```java
+    @CheckReturnValue
+    @SchedulerSupport(SchedulerSupport.NONE)
+    public final <R> Observable<R> map(Function<? super T, ? extends R> mapper) {
+        ObjectHelper.requireNonNull(mapper, "mapper is null");
+        return RxJavaPlugins.onAssembly(new ObservableMap<T, R>(this, mapper));
+    }
+```
+和create方法很类似，但是onAssembly方法传入的参数是ObservableMap对象，接着看：
+
+```java
 
 ```

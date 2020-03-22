@@ -326,7 +326,7 @@ resize才是一个比较复杂的存在，看代码：
 
 回到刚才的那四个指针结点，我为什么叫它们指针的，因为这里是链表的处理么，loHead和loTail处理下标不变的情况，而hiHead和hiTail处理下标变为（oldTab的index+oldCap）的情况，head指向newTab中的Node，而tail指向链表的尾部，最后将head放入newTab中即可。
 
-到这里，我们就差不过总结了一遍Java 8中的HashMap的重要使用原理了。
+到这里，我们就差不多总结了一遍Java 8中的HashMap的重要使用原理了。
 
 
 
