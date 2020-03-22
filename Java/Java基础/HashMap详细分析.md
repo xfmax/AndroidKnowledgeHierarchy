@@ -288,13 +288,13 @@ resize才是一个比较复杂的存在，看代码：
                     Node hiHead，hiTail；
                     do{
                         if(hash & oldTab == 0){//index在newTable不变
-                         if(loTail == null){
-                                loHead = e;
-                            }else{
-                                loTail.next = e;
-                            }
-                            loTail = e;
-                         }else{
+                             if(loTail == null){
+                              loHead = e;
+                             }else{
+                              loTail.next = e;
+                             }
+                              loTail = e;
+                        }else{
                              if(hiTail == null){
                                  hiHead = e;
                              }else{

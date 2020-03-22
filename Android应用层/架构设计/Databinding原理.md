@@ -1,0 +1,5 @@
+使用databinding技术，在编译器，会将被标记的xml中的view附上tag属性，同时生成一个viewdatabinding的class文件，这里面有页面上所有的view引用，以及数据实体的引用。
+
+1.预处理xml文件，抽取相关的databanding相关的内容生成一个新的xml文件（两个xml文件通过tag来关联相应的属性）
+2.生成viewbinding与BR
+3.绑定view只有将tag标签删除，数据绑定使用BindingAdapter
