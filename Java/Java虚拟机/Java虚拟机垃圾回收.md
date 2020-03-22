@@ -4,7 +4,10 @@
 让我们来了解一下class文件，class文件是由Java编译器根据java文件生成的，其中包含魔术（0xCAFEBABY）、常量池、接口表、字段表、方法表等。
 
 #### 类的生命周期：
-1.加载：根据名字找到二进制字节流，将这个二进制字节流所代表的静态储存结构变为运行时的数据结构，在内存中生成一个代表这个Class的对象，作为方法区这个类的各种数据的访问入口。
+1.加载：
+
+根据名字找到二进制字节流，将这个二进制字节流所代表的静态储存结构变为运行时的数据结构，在内存中生成一个代表这个Class的对象，作为方法区这个类的各种数据的访问入口。
+
 2.链接：
 
     验证：确保导入类型的正确性。
@@ -12,12 +15,16 @@
     解析：将符号引用替换为直接引用。
 3.初始化：将类变量初始化为正确的初始值。
 
+4.使用
+
+5.卸载
+
 #### 类加载子系统
 类加载子系统的工作是类生命周期中加载的时候执行根据名字找到对应的二进制流，并创建class对象，作为方法区该类的访问入口。
 
 其中分为三种加载器：
 
-    1.BootStrapClassLoader 加载Java自身的api的，例如java.lang、java.util等这些系统类。
+    1.BootStrapClassLoader 加载Java自身的api的，例如java.lang.java.util等这些系统类。
     2.ExtensionsClassLoader 加载$JAVA_HOME/jre/lib/ext文件。
     3.ApplicationClassLoader 加载当前应用的ClassPath目录。
 
@@ -66,7 +73,7 @@
     6.由引导类加载器加载的对象。
     7.GC控制的对象。
 
-垃圾收集算法：标记-清除算法 标记-压缩算法 复制算法。
+垃圾收集算法：1.标记-清除算法 2.标记-压缩算法 3.复制算法。
 
 标记清除算法：将内存上的需要清除的位置进行标记并清除，缺点是内存碎片化。
 
@@ -87,3 +94,8 @@ jvm将分代的区域分为**新生代**和**老年代**，其中新生代分为
     1.Minor Collection:新生代垃圾回收。
     2.Full Collection:老年代垃圾回收，通常伴随一次Minor Collection，它的收集频率较低，时间较长。
 
+因为Full Collection比较复杂，所以拿Full Collection举例描述一次gc的过程：
+当执行一次Full Collection时，Eden空间的存活对象和From survivor的存活对象会复制到To Survivor中，之后From survivor 和To survivor互换名称,以等待下一次gc。
+有两种情况Eden和From survivor的存活对象不会复制进入To survivor:
+1.存活的对象的分代年龄超过了设置的阈值（-XX:MAXTenuringThreshold）
+2.To survivor放不下存活的对象了。

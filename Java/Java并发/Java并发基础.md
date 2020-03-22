@@ -1,6 +1,10 @@
 task1：实现线程安全同步的方式？
 task2：synchronized是可重入锁吗？java如何实现synchronized的可重入？
 task3：ReentrantLock如何实现可重入？
+task4:Sychronized底层实现
+task5:Voltile底层实现
+
+task6:java的内存模型
 
 并发需要掌握的几个并发特性：
 
@@ -28,3 +32,18 @@ task2：synchronized是可重入锁吗？java如何实现synchronized的可重�
 task3：ReentrantLock如何实现可重入？
 
 按照原理说，ReentrantLock和synchronized实现可重入的原理应该是相似的，但是synchronized是关键字，会直接翻译成jvm能识别的class文件中的指令。
+
+task4：在对象的头文件里会持有monitor这个对象的引用，这个对象会记录这个对象被其他对象持有锁的信息，以及等待队列等信息。
+
+task5：首先voltile起到的作用有两个：
+
+        1.保证内存的可见性
+        2.禁止JVM虚拟机的指令重排序
+
+底层实现，通过观察为变量添加与删除voltile关键字的字节码发现，其实在字节码中没有任何不同，所以voltile关键字不是作用在字节码上，在汇编代码上看到voltile修饰的变量前面有一个lock前缀，这是一个原子操作，在多线程的情况下内存地址保持互斥，而这个lock前缀相当于一个内存屏障，内存屏障的意思是一组cpu处理指令，实现对内存操作的顺序限制，同时内存屏障可以强制更新内存缓存。
+
+
+task6:
+首先Java的内存模型是规定了JVM与主存是如何协调工作的。
+
+每一个线程都有自己私有的一个存储空间，这个私有的存储空间何时与主存进行同步，就是内存模型关注的事情，正常情况下JVM对这个同步是比较松散的标准，因为不是每次变量的写操作都是具有多线程性的，所以针对多线程自己，可以使用voltile或者synchronized等关键字在底层保证变量修改的同步性。

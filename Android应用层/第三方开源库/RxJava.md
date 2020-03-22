@@ -109,3 +109,56 @@ public interface ObservableOnSubscribe<T> {
 ```java
 
 ```
+
+task1:rxjava的背压机制？
+
+首先我们要知道背压到底是什么？
+
+背压就是在执行**异步**发送消息的时候，接收方因为发送方的发送速率过快而导致无法处理及时处理发送过来的消息的一种情况，而背压就是一种流速控制策略，来保证这种情况不会撑爆内存。    
+
+背压的实现方式：
+
+#### 在Java 2.0中提供了Flowable来处理背压问题
+
+```java
+//Flowable创建被观察者
+Flowable.create(new FlowableOnSubscribe<Integer>() {
+    @Override
+    public void subscribe(@NonNull FlowableEmitter<Integer> emitter) throws Exception {
+        emitter.onNext(1);
+        emitter.onComplete();
+
+    }
+}, BackpressureStrategy.ERROR)//需要传入的被压参数
+        .subscribeOn(Schedulers.io())//设置悲观者在子线程中
+        .observeOn(AndroidSchedulers.mainThread())//设置观察者在主线程中
+        //进行订阅
+        .subscribe(new Subscriber<Integer>() {
+            @Override
+            public void onSubscribe(Subscription s) {
+
+                //制定观察者接受事件的个数(响应式拉取),默认是最大
+                s.request(Long.MAX_VALUE);
+
+            }
+
+            @Override
+            public void onNext(Integer integer) {
+
+                Log.d("TAG","接受数据:" + integer);
+
+            }
+
+            @Override
+            public void onError(Throwable t) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+```
+
+task2:线程的切换原理？

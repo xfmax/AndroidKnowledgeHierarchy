@@ -1,0 +1,1 @@
+Thread中有一个成员变量Map，key为ThreadLocal，value为ThreadLocal.set(value)的value值，在使用ThreadLocal.set()方法的时候会为这个Map赋值，当使用get方法的时候，通过Thread.currentThread获取当前的线程，在从此线程的成员变量Map中获取该ThreadLocal的value值。

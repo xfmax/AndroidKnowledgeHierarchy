@@ -1,6 +1,6 @@
 ### 了解一下apk的结构
 
-    1.META—INF：存放签名文件，分别为 MANIFEST.MF、CERT.SH、CERT.RSA。
+    1.META—INF：存放签名文件，分别为 MANIFEST.MF、CERT.SF、CERT.RSA。
     2.AndroidManifest.xml:android四大组件注册信息。
     3.classes.dex:将混淆后的class文件优化并打包成dex文件。
     4.lib:包含特定cpu架构的软件库，例如armeabi、armeabi-v7a、armeabi-v8a,x86,x86_64,mips。

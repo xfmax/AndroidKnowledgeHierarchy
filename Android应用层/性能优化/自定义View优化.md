@@ -1,0 +1,5 @@
+最重要的就是onDraw方法，这个方法里尽量不要创建对象，更不要使用for循环，invalidate会导致整个view的重绘，所以使用带参数的invalidate方法，可以控制刷新的区域。
+
+layout方法也会很耗时，所以谨慎使用requestLayout，一旦重新布局，会遍历整个view tree，进行计算，不是很划算。
+
+频繁调用的方法一定要精简代码。
