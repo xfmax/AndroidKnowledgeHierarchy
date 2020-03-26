@@ -1,13 +1,13 @@
 Glide分析工作主要要针对两方面：
 
-    1.内存缓存的设置
+    1.内存缓存的设置（对象池）
     2.掌握生命周期，再配合生命周期来判断要不要进行数据的更新
 
 ### 内存缓存
 
 聊这个，我们就要知道LruCache这个内存缓存的类，LruCache的内部实现是LinkedHashMap，在创建LruCache的时候，需要给一个空间大小，这个大小默认是总容量的八分之一。
 
-![lrucache](https://github.com/xfmax/android_know/blob/master/Android%E5%BA%94%E7%94%A8%E5%B1%82/%E5%9B%BE%E7%89%87%E5%8A%A0%E8%BD%BD%E6%A1%86%E6%9E%B6/image/lrucache_structure.png)
+![lrucache](./image/lrucache_structure.png)
 
 整体流程：
 
@@ -135,3 +135,26 @@ LinkedHashMap内部就是一个HashMap，然后另外保存一个链表，具体
 
 到此LruCache就分析完成，接着，我们来看看Glide中是如何使用LruCache。
 
+1.with方法
+
+with方法传入的Context参数分两种：Application和非Applicaton
+
+如果是Application的话，那么就不用处理，因为此时的生命周期是整个应用的生命周期。
+
+如果是非Application的话，那么就会创建一个隐藏的Fragment来获取生命周期
+
+with方法最终会返回一个RequestManager
+
+2.load方法
+
+这个方法返回一个DrawableTypeRequest对象，这个对象的父类是DrawableRequestBuilder，这个类承包了Glide的大部分api
+
+3.into方法
+
+    1.初始化参数，做好网络请求的准备
+    2.使用原始的HttpConnect，读取文件流
+    3.根据文件判断是gif或者png
+    4.通过复杂的逻辑将图片提取出来，交给ImageView控件
+
+
+对象池：通过减少大对象的内存分配开销来达到节省资源的目的。
