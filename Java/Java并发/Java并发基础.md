@@ -32,6 +32,7 @@ task2：synchronized是可重入锁吗？java如何实现synchronized的可重�
 task3：ReentrantLock如何实现可重入？
 
 按照原理说，ReentrantLock和synchronized实现可重入的原理应该是相似的，但是synchronized是关键字，会直接翻译成jvm能识别的class文件中的指令。
+详细讲解就是AQS(一组同步器使用同一个voltile修改的int对象来进行枷锁过程的判断)+CAS（通过比较“需要被修改的值是否被改变”来决定“是否要进行更新或者报错”，注意CAS存在的问题可以使用Version来解决）
 
 task4：在对象的头文件里会持有monitor这个对象的引用，这个对象会记录这个对象被其他对象持有锁的信息，以及等待队列等信息。
 
