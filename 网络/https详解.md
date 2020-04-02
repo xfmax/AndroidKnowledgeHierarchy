@@ -17,7 +17,7 @@ https在http的基础上，在传输层（Tcp）上面建立了一个SSL/TLS安�
       检查通过会随机生成一个session ticket3，并使用证书中的公钥进行加密，并发送给服务器，服务器端会通过私钥解密出session ticket3，然后通过session ticket1（浏览器）+session ticket2（服务器）+session ticket3（浏览器）组合成session ticket。
 
 如图：
-![https](https://github.com/xfmax/android_know/blob/master/%E7%BD%91%E7%BB%9C/image/https.jpg)
+![https](./image/https.jpg)
 
 
 ### httpurlConnection如何支持https，并优化DNS

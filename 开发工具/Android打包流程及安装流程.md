@@ -1,6 +1,6 @@
 详细的打包流程：
 
-![install-image](https://github.com/xfmax/android_know/blob/master/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/image/apk_build.png)
+![install-image](./image/apk_build.png)
 
     1.aapt将各个模块的manifest文件、res文件夹下的文件、assets文件夹下的文件，执行合并，然后为res文件夹下的图片文件生成R.java、将res文件夹下的xml文件生成resource.arsc文件，raw和assets文件夹的内容保持原状，assets文件夹下的文件是不能被映射到R.java中的，所以使用AssetManager进行加载。
 
@@ -23,7 +23,7 @@
 
 以系统中的packageInstall.apk安装应用程序为例子，当你点击apk文件的时候，会调用系统应用packageInstall.apk应用，展示出安装界面：
 
-![install-image](https://github.com/xfmax/android_know/blob/master/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/image/install_process.png)
+![install-image](./image/install_process.png)
 
 当你点击安装按钮时，会执行2步操作：
 
@@ -32,7 +32,7 @@
 
 整个的安装流程如图：
 
-![install-image](https://github.com/xfmax/android_know/blob/master/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/image/apk_install_structure.png)
+![install-image](./image/apk_install_structure.png)
 
     1.复制apk文件到/data/app/pkg目录下。
     2.解析AndroidManifest文件，并建立/data/data/pkg目录。
