@@ -7,7 +7,9 @@ https在http的基础上，在传输层（Tcp）上面建立了一个SSL/TLS安�
 ### 握手过程
 
     1.client-hello：浏览器完成域名解析后，获得ip地址，然后与host：443尝试连接，浏览器会将“支持的加密组件/尝试连接到host头”，并附上一份随机生成的session ticket1。
-    2.server-hello：服务器会收到TLS的连接请求，存储浏览器session ticket2，根据发送来的host来寻找服务器证书，然后将服务器的证书和加密套件以及一份随机生成的session ticket发送给浏览器。
+
+    2.server-hello：服务器会收到TLS的连接请求，存储浏览器session ticket1，根据发送来的host来寻找服务器证书，然后将服务器的证书和加密套件以及一份随机生成的session ticket2发送给浏览器。
+
     3.cipher-spec：浏览器收到服务器的证书后，进行证书校验，分为如下几步：
         验证证书有效期
         验证证书的域名和浏览器输入的是否相同
