@@ -7,11 +7,11 @@ Glide分析工作主要要针对两方面：
 
 聊这个，我们就要知道LruCache这个内存缓存的类，LruCache的内部实现是LinkedHashMap，在创建LruCache的时候，需要给一个空间大小，这个大小默认是总容量的八分之一。
 
-![lrucache](./image/lrucache_structure.png)
-
 整体流程：
 
-当我们把对象从LruCache中删除后，会把对象加入到softReference中，当需要进行查找时，先去LruCache中找，找不到，就去softReference中寻找，如果找到了，就将对象重新加入到LruCache中，如果还找不到，就去文件系统中找，如果找到了就把对象放到LruCache中，如果找不到，就去网络下载，之后保存到文件系统，并放入LruCache。
+首先取值的时候，先从activeResource（一个value为weakReference的map）中取，如果有，直接返回，如果没有，从LruCache寻找，找到后删除，并把对象加入到activeResource中，如果还找不到，就去文件系统中找，如果找到了就把对象放到activeResource中，如果找不到，就去网络下载，之后保存到文件系统，并放入activeResource，而activeResource中有一个引用计数器，用来计算当前的资源是否还有引用指向，如果没有了，就会把其从activeResource中删除，并加入到Lrucache中。
+
+这么设计的目的是为了让“持有引用指向的资源”和“没有引用指向的资源”分开，分开的好处就是在Lrucache做清理工作的时候，可以把bitmap送回到bitmapPools中，如果该资源还被其他引用指向的话，便不能送回到bitmapPools中，也就是不能复用了。
 
 LinkedHashMap内部就是一个HashMap，然后另外保存一个链表，具体看代码，首先看一下put方法：
 
@@ -158,3 +158,5 @@ with方法最终会返回一个RequestManager
 
 
 对象池：通过减少大对象的内存分配开销来达到节省资源的目的。
+
+bitmapPools主要针对的就是activeResource,当发现activeResource取出的所引用对应的对象已经被回收的情况下，要启动Release来释放资源，此时判断是否需要使用Lrucache，如果使用，那么就将资源添加到Lrucache中，如果不使用，那么就将资源送回bitmapPools中。
