@@ -24,3 +24,12 @@ task4：flutter如何提高渲染速度
 task5：flutter单线程模型
 
 flutter是一个单线程的系统，里面有两个执行队列MicrotaskQueue任务和EventQueue,前者执行的系统的任务，比较少也，flutter中只有 7 处用到了而已（比如，手势识别、文本输入、滚动视图、保存页面效果等需要高优执行任务的场景），但是重要，所以现行执行，而EventQueue则是I/O，绘制、定时器。
+
+task6:StatefulWidget 生命周期
+
+1.初始化
+//createState , initState
+2.更新
+//didChanegDependencies , bulid, didUpdateWidget
+3.销毁
+//deactivate , dispose
