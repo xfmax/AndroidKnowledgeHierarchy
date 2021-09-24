@@ -1,5 +1,7 @@
 task1：https和http的异同？
+
 task2：https握手过程？
+
 task3：HttpUrlConnection是如何实现https的？以及优化dns域名解析
 
 https在http的基础上，在传输层（Tcp）上面建立了一个SSL/TLS安全协议层，加密数据包。
@@ -54,3 +56,7 @@ public static HttpURLConnection getHttpURLConnection(String urlString)
 ```
 
 https://mp.weixin.qq.com/s?__biz=MzA3ODgyNzcwMw==&mid=201837080&idx=1&sn=b2a152b84df1c7dbd294ea66037cf262&scene=2&from=timeline&isappinstalled=0&utm_source=tuicool
+
+HttpDns：优点是可以将实际用户的ip地址发送到HttpDns服务器，服务器通过域名配置系统可以更加准确地返回需要DNS解析的ip地址。
+
+之前LocalDNS可能因为NAT导致最终发送到DNS服务器的IP已经不是用户原来的IP地址了，那么根据这个ip地址进入域名系统匹配解析之后的IP地址可能已不是最佳的选择。  

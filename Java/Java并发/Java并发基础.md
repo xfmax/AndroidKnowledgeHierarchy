@@ -3,8 +3,8 @@ task2：synchronized是可重入锁吗？java如何实现synchronized的可重�
 task3：ReentrantLock如何实现可重入？
 task4:Sychronized底层实现
 task5:Voltile底层实现
-
 task6:java的内存模型
+task7:锁优化
 
 并发需要掌握的几个并发特性：
 
@@ -48,3 +48,10 @@ task6:
 首先Java的内存模型是规定了JVM与主存是如何协调工作的。
 
 每一个线程都有自己私有的一个存储空间，这个私有的存储空间何时与主存进行同步，就是内存模型关注的事情，正常情况下JVM对这个同步是比较松散的标准，因为不是每次变量的写操作都是具有多线程性的，所以针对多线程自己，可以使用voltile或者synchronized等关键字在底层保证变量修改的同步性。
+
+task7：
+锁优化：
+- 缩短锁时间
+- 锁的粒度化 - ConcurrentHashMap
+- 锁的粗化 - 多个串行的锁是否可以合并为一个
+- 读写分离
